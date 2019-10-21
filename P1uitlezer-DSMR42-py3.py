@@ -47,36 +47,38 @@ ser.timeout = 20
 ser.port = "/dev/ttyUSB0"
 
 # Open COM port
-# try:
-#     ser.open()
-# except:
-#     show_error(ser.name)
-#     halt("Error opening serial socket", ret=1)
+try:
+    ser.open()
+except:
+    show_error(ser.name)
+    halt("Error opening serial socket", ret=1)
 
 # Initialize
 # stack is mijn list met de 36 regeltjes.
 p1_teller = 0
-stack = []
 t_lines = {}
 
 # Test
-with open('test-telegram.txt', 'r') as f:
-    lines = f.readlines()
+# with open('test-telegram.txt', 'r') as f:
+#     lines = f.readlines()
 
 while p1_teller < 36:
     p1_line = ''
     # Read 1 line
     try:
-        #p1 = str(ser.readline())
-        if lines:
-            p1 = lines.pop(0)
-        else:
-            break
+        p1 = ser.readline()
+        # if lines:
+        #     p1 = lines.pop(0)
+        # else:
+        #     break
     except Exception as e:
         print(e)
         show_error(ser.name)
         halt("Error reading serial socket", ret=2)
+    else:
+        p1 = p1.decode()
 
+    print("raw output", p1)
     if p1[0].isdigit():
         #print(p1)
         key, val = p1.strip().split('(', 1)
@@ -107,9 +109,9 @@ for key, val in t_lines.items():
         print("{:<30s} {:<10} KW".format("totaal piekterug", val))
         meter -= int(float(val))
     elif key == "1-0:1.7.0":
-        print("{:<30s} {:<10} KW".format("huidig afgenomen vermogen", float(val) * 1000))
+        print("{:<30s} {:<10} W".format("huidig afgenomen vermogen", val))
     elif key == "1-0:2.7.0":
-        print("{:<30s} {:<10} KW".format("huidig teruggeleverd vermogen", float(val) * 1000))
+        print("{:<30s} {:<10} W".format("huidig teruggeleverd vermogen", val))
 
 print("{:<30s} {:<10} KW {:<10}".format("meter totaal", meter, "afgenomen/teruggeleverd van het net"))
 
