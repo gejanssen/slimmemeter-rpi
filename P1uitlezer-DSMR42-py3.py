@@ -78,7 +78,7 @@ while p1_teller < 36:
     else:
         p1 = p1.decode()
 
-    print("raw output", p1)
+    print(p1)
     if p1[0].isdigit():
         #print(p1)
         key, val = p1.strip().split('(', 1)
