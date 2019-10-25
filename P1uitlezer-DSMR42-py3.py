@@ -1,6 +1,8 @@
 #
 # DSMR P1 uitlezer
 # (c) 10-2012 2016 - GJ - gratis te kopieren en te plakken
+import sqlite3
+from pprint import pprint
 
 versie = "1.2-py3"
 import sys
@@ -57,7 +59,7 @@ except:
 # stack is mijn list met de 36 regeltjes.
 p1_teller = 0
 t_lines = {}
-
+db_t_lines = [None]
 # Test
 # with open('test-telegram.txt', 'r') as f:
 #     lines = f.readlines()
@@ -78,10 +80,11 @@ while p1_teller < 36:
     else:
         p1 = p1.decode()
 
-    print("raw output", p1)
+    #print("raw output", p1)
     if p1[0].isdigit():
         #print(p1)
         key, val = p1.strip().split('(', 1)
+        db_t_lines.append("(" + val) # add the ( to get original value for dbase
         val = val[:-1] # loose last )
         if "*kW" in val:
             val = val.split('*kW')[0]
@@ -91,27 +94,42 @@ while p1_teller < 36:
         break
 
     p1_teller = p1_teller + 1
-#print(t_lines)
+#print(len(t_lines), "total lines")
+if len(t_lines) != 30:
+    halt("No valid telegram received?", ret=3)
+
+# strore the data into the dbase first
+#pprint(db_t_lines)
+con = sqlite3.connect('dsmr42.sqlite')
+cur = con.cursor()
+placeholders = ', '.join('?' * len(db_t_lines))
+sql = 'INSERT INTO telegrams VALUES ({})'.format(placeholders)
+#print(sql, db_t_lines)
+cur.execute(sql, db_t_lines)
+con.commit()
+
 meter = 0
 
 for key, val in t_lines.items():
     #print(key, val)
     if key == "1-0:1.8.1":
-        print("{:<30s} {:<10} KW".format("totaal dagdal", val))
+        print("{:<30s} {:<10} KW".format("totaal laagtarief verbruik", val))
         meter += int(float(val))
     elif key == "1-0:1.8.2":
-        print("{:<30s} {:<10} KW".format("totaal piekdag", val))
+        print("{:<30s} {:<10} KW".format("totaal hoogtarief verbruik", val))
         meter += int(float(val))
     elif key == "1-0:2.8.1":
-        print("{:<30s} {:<10} KW".format("totaal dalterug", val))
+        print("{:<30s} {:<10} KW".format("totaal laagtarief retour", val))
         meter -= int(float(val))
     elif key == "1-0:2.8.2":
-        print("{:<30s} {:<10} KW".format("totaal piekterug", val))
+        print("{:<30s} {:<10} KW".format("totaal hoogtarief retour", val))
         meter -= int(float(val))
     elif key == "1-0:1.7.0":
-        print("{:<30s} {:<10} W".format("huidig afgenomen vermogen", val))
+        print("{:<30s} {:<10} W".format("huidig afgenomen vermogen", float(val) * 1000))
     elif key == "1-0:2.7.0":
-        print("{:<30s} {:<10} W".format("huidig teruggeleverd vermogen", val))
+        print("{:<30s} {:<10} W".format("huidig teruggeleverd vermogen", float(val) * 1000))
 
 print("{:<30s} {:<10} KW {:<10}".format("meter totaal", meter, "afgenomen/teruggeleverd van het net"))
+
+
 
