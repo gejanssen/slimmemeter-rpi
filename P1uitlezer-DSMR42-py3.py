@@ -84,7 +84,7 @@ while p1_teller < 36:
     if p1[0].isdigit():
         #print(p1)
         key, val = p1.strip().split('(', 1)
-        db_t_lines.append("(" + val) # add the ( to get original value for dbase
+        db_t_lines.append(val.strip(")")) # strip the ) to get original value for dbase
         val = val[:-1] # loose last )
         if "*kW" in val:
             val = val.split('*kW')[0]
@@ -104,7 +104,7 @@ con = sqlite3.connect('dsmr42.sqlite')
 cur = con.cursor()
 placeholders = ', '.join('?' * len(db_t_lines))
 sql = 'INSERT INTO telegrams VALUES ({})'.format(placeholders)
-#print(sql, db_t_lines)
+print(sql, db_t_lines)
 cur.execute(sql, db_t_lines)
 con.commit()
 
