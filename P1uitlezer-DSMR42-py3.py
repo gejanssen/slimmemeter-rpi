@@ -1,6 +1,7 @@
 #
 # DSMR P1 uitlezer
 # (c) 10-2012 2016 - GJ - gratis te kopieren en te plakken
+from datetime import datetime
 import sqlite3
 from pprint import pprint
 
@@ -100,6 +101,8 @@ if len(t_lines) != 30:
 
 # strore the data into the dbase first
 #pprint(db_t_lines)
+t = datetime.now().astimezone().isoformat()
+db_t_lines.append(t)
 con = sqlite3.connect('dsmr42.sqlite')
 cur = con.cursor()
 placeholders = ', '.join('?' * len(db_t_lines))

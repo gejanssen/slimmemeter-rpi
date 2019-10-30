@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Slimme Meter</title>
+    <link rel="stylesheet" href='../static/style.css'/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+		body {
+			text-align: center;
+		}
+
+		#g1,
+		#g2 {
+			width: 200px;
+			height: 160px;
+			display: inline-block;
+			margin: 1em;
+		}
+
+    </style>
+</head>
+
+<body>
+	<h1>Slimme Meter Verbruik </h1>
+    <div id="g1"></div>
+    <div id="g2"></div>
+    <hr>
+	<h3> Last Meter Reading: {{ time }} <a href="/"class="button">REFRESH</a></h3>
+	<hr>
+	<h3> HISTORICAL DATA </h3>
+		<p> Enter number of samples to retrieve:
+		<form method="POST">
+			<input name="numSamples" value= {{numSamples}}>
+			<input type="submit">
+		</form></p>
+		<hr>
+		<img src="/plot/p_in" alt="Image Placeholder" width="49%">
+		<img src="/plot/p_out" alt="Image Placeholder" width="49%">
+
+	<p> @2018 Developed by MJRoBot.org</p>
+
+    <script src="../static/raphael-2.1.4.min.js"></script>
+    <script src="../static/justgage.js"></script>
+    <script>
+	var g1, g2;
+	document.addEventListener("DOMContentLoaded", function(event) {
+	    g1 = new JustGage({
+		id: "g1",
+		value: {{total_in}},
+		valueFontColor: "yellow",
+		min: 0,
+		max: 8000,
+		title: "Power Consumption",
+		label: "Watt"
+	});
+	    g2 = new JustGage({
+		id: "g2",
+		value: {{total_out}},
+		valueFontColor: "yellow",
+		min: 0,
+		max: 2500,
+		title: "Power Surplus",
+		label: "Watt"
+	});
+      });
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
