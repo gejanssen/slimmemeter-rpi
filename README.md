@@ -59,3 +59,5 @@ Created symlink /etc/systemd/system/multi-user.target.wants/appWebserver.service
 pi@raspberrypi:~ $
 ```
 
+## Example of the flask webpage
+![Screenshot](https://raw.githubusercontent.com/schoolsplay/slimmemeter-rpi/master/out.png)
