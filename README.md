@@ -1,15 +1,15 @@
-#Slimme meter info
+# Slimme meter info
 Code is forked from: https://github.com/gejanssen/slimmemeter-rpi  
 Webserver comes from: https://medium.com/@rovai/from-data-to-graph-a-web-jorney-with-flask-and-sqlite-6c2ec9c0ad0
 
-##Korte uitleg over slimme meters (Taken from domotix)
-###Wat is een P1 poort?
+## Korte uitleg over slimme meters (Taken from domotix)
+### Wat is een P1 poort?
 De P1 poort is een seriele poort (is optioneel) op je digitale elektra meter waarin je een RJ-11 (Registered Jack) 
 stekkertje kan steken (bekend van de telefoonaansluitingen) om zo de meterstanden en het verbruik uit te lezen. 
 Het is niet mogelijk om gegevens naar de poort te sturen!
 Onderaan deze pagina heb ik de informatiebladen “Dutch Smart Meter Requirements” (DSMR) toegevoegd.
 
-###Niet standaard (zie DSMR v4.04, Hfdst 4.6 “signals”)
+### Niet standaard (zie DSMR v4.04, Hfdst 4.6 “signals”)
 Deze seriele poort is echter niet standaard, ondanks dat hij op UART TTL niveau werkt, zijn de logische 
 waarden omgedraaid: 1=0 en 0=1 ,dit is softwarematig op te lossen, maar geeft niet altijd het gewenste resultaat, 
 oplossing is om dit hardwarematig te doen, bijvoorbeeld met een chip ertussen te plaatsen vaak wordt
@@ -19,11 +19,11 @@ moet hij aan kunnen.
 De P1 poort stuurt alleen maar data als de RTS pin is voorzien van >+5v ten opzichte van de GND (-),
 zolang de spanning daarop blijft staan wordt er elke 10 seconden een “telegram” verzonden op de TxD
 
-###Voorbeeld van een telegram, zie test-telegram.txt
+### Voorbeeld van een telegram, zie test-telegram.txt
 Dit voorbeeld is van een Landis 350 DSRM4.2
 
 
-##Code dependencies:
+## Code dependencies:
 flask
 matplotlib
 serial
