@@ -1,6 +1,6 @@
 # Slimme meter info
 Code is forked from: https://github.com/gejanssen/slimmemeter-rpi  
-Webserver comes from: https://medium.com/@rovai/from-data-to-graph-a-web-jorney-with-flask-and-sqlite-6c2ec9c0ad0
+Webserver based of: https://medium.com/@rovai/from-data-to-graph-a-web-jorney-with-flask-and-sqlite-6c2ec9c0ad0  
 Telegram codes and explanation: http://domoticx.com/p1-poort-slimme-meter-hardware/  
 
 ## Korte uitleg over slimme meters (Taken from domotix)
