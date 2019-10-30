@@ -1,5 +1,5 @@
 #Slimme meter info
-Code is forked from: https://github.com/gejanssen/slimmemeter-rpi
+Code is forked from: https://github.com/gejanssen/slimmemeter-rpi\
 Webserver comes from: https://medium.com/@rovai/from-data-to-graph-a-web-jorney-with-flask-and-sqlite-6c2ec9c0ad0
 
 ##Korte uitleg over slimme meters (Taken from domotix)
@@ -28,14 +28,19 @@ flask
 matplotlib
 serial
 
+## Pull the meter for a telegram
+We use a crontab to pull every 5 minutes a new telegram from the meter.\
+(Uncomment the last part to get some output for testing)\
+```*/5 * * * * /home/pi/slimmemeter-rpi/pull.sh #>>/tmp/cronrun 2>&1```
+
 ## Setup server as a systemd service
-To start the flask server use the systemd service.
-(make sure start_server.sh is chmod a+x)
+To start the flask server use the systemd service.\
+(make sure start_server.sh is chmod a+x)\
 ```
 cp appWebserver.service to /etc/systemd/system/
 
-pi@raspberrypi:~/slimmemeter-rpi/rspiWebServer $ sudo systemctl start appWebserver
-pi@raspberrypi:~/slimmemeter-rpi/rspiWebServer $ sudo systemctl status appWebserver
+pi@raspberrypi:~ $ sudo systemctl start appWebserver
+pi@raspberrypi:~ $ sudo systemctl status appWebserver
 ● appWebserver.service - Flask Webserver
    Loaded: loaded (/etc/systemd/system/appWebserver.service; disabled; vendor preset: enabled)
    Active: active (running) since Wed 2019-10-30 15:10:18 CET; 8s ago
@@ -46,11 +51,11 @@ pi@raspberrypi:~/slimmemeter-rpi/rspiWebServer $ sudo systemctl status appWebser
            └─11335 python3 appWebserverHist.py
 
 okt 30 15:10:18 raspberrypi systemd[1]: Started Flask Webserver.
-pi@raspberrypi:~/slimmemeter-rpi/rspiWebServer $
+pi@raspberrypi:~ $
 
 And enable it so that systemd will make it part of the setup
-pi@raspberrypi:~/slimmemeter-rpi/rspiWebServer $ sudo systemctl enable appWebserver
+pi@raspberrypi:~ $ sudo systemctl enable appWebserver
 Created symlink /etc/systemd/system/multi-user.target.wants/appWebserver.service → /etc/systemd/system/appWebserver.service.
-pi@raspberrypi:~/slimmemeter-rpi/rspiWebServer $
+pi@raspberrypi:~ $
 ```
 
