@@ -9,7 +9,7 @@
 '''
 	RPi WEb Server for DHT captured data with Graph plot
 '''
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -68,16 +68,18 @@ def maxRowsTable():
 
 # initialize global variables
 global numSamples
+global time_obj
 numSamples = maxRowsTable()
 if (numSamples > 101):
     numSamples = 100
 
-
 # main route
 @app.route("/")
 def index():
+    global time_obj
     #time, temp, hum = getLastData()
     total_in, total_out, timestamp = getLastData()
+    print(timestamp)
     time_obj = datetime.strptime(timestamp.split(".")[0], '%Y-%m-%dT%H:%M:%S')
     templateData = {
         'time'	: str(time_obj),
@@ -114,7 +116,8 @@ def plot_power_in():
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
     axis.set_title("Power consumption in Watt")
-    axis.set_xlabel("Samples")
+    start = time_obj - timedelta(minutes=numSamples * 5)
+    axis.set_xlabel("Periode: {} - {} (5 minute intervals)".format(start.time(), time_obj.time()))
     axis.grid(True)
     xs = range(numSamples)
     axis.plot(xs, ys)
@@ -132,7 +135,8 @@ def plot_power_out():
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
     axis.set_title("Power Surplus in Watt")
-    axis.set_xlabel("Samples")
+    start = time_obj - timedelta(minutes=numSamples * 5)
+    axis.set_xlabel("Periode: {} - {} (5 minute intervals)".format(start.time(), time_obj.time()))
     axis.grid(True)
     xs = range(numSamples)
     axis.plot(xs, ys)
