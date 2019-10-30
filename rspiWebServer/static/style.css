@@ -1,6 +1,6 @@
 body{
-	background: blue;
-	color: yellow;
+	background: linear-gradient(black, white);
+	color:  #FFA500;
 	padding:1%
 }
 .button {

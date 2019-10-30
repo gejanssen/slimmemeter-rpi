@@ -43,7 +43,8 @@ def getLastData():
 def getHistData(numSamples):
     conn = sqlite3.connect('../dsmr42.sqlite')
     curs = conn.cursor()
-
+    curs.execute("SELECT `timestamp` FROM telegrams ORDER BY timestamp DESC LIMIT 1")
+    timestamp = curs.fetchall()[0][0]
     curs.execute("SELECT `1-0:1.7.0`, `1-0:2.7.0` FROM telegrams ORDER BY timestamp DESC LIMIT " + str(numSamples))
     data = curs.fetchall()
     dates = []
@@ -54,7 +55,7 @@ def getHistData(numSamples):
         #dates.append(row[0])
         total_in.append(row[0])
         total_out.append(row[1])
-    return total_in, total_out
+    return total_in, total_out, timestamp
 
 
 def maxRowsTable():
@@ -111,11 +112,12 @@ def my_form_post():
 
 @app.route('/plot/p_in')
 def plot_power_in():
-    total_ins, total_outs = getHistData(numSamples)
+    total_ins, total_outs, timestamp = getHistData(numSamples)
     ys = [float(x.split("*")[0]) * 1000 for x in total_ins]
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
     axis.set_title("Power consumption in Watt")
+    time_obj = datetime.strptime(timestamp.split(".")[0], '%Y-%m-%dT%H:%M:%S')
     start = time_obj - timedelta(minutes=numSamples * 5)
     axis.set_xlabel("Periode: {} - {} (5 minute intervals)".format(start.time(), time_obj.time()))
     axis.grid(True)
@@ -130,11 +132,12 @@ def plot_power_in():
 
 @app.route('/plot/p_out')
 def plot_power_out():
-    total_ins, total_outs = getHistData(numSamples)
+    total_ins, total_outs, timestamp = getHistData(numSamples)
     ys = [float(x.split("*")[0]) * 1000 for x in total_outs]
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
     axis.set_title("Power Surplus in Watt")
+    time_obj = datetime.strptime(timestamp.split(".")[0], '%Y-%m-%dT%H:%M:%S')
     start = time_obj - timedelta(minutes=numSamples * 5)
     axis.set_xlabel("Periode: {} - {} (5 minute intervals)".format(start.time(), time_obj.time()))
     axis.grid(True)
