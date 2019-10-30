@@ -22,6 +22,13 @@ zolang de spanning daarop blijft staan wordt er elke 10 seconden een “telegram
 ### Voorbeeld van een telegram, zie test-telegram.txt
 Dit voorbeeld is van een Landis 350 DSRM4.2
 
+## Connect to the meter
+To connect to the meter you need a serial2usb cable.  
+Not a normal one but a special cable. You can make it yourself, search the internet if you fancy some soldering.  
+I just buy it on aliexpress :-)  
+Search for "Dutch Smart Meter" and you have a cable for 5 euros :-)  
+Make sure to include your type of meter as there are differences between various meters.  
+Also check the reviews for dutch reviewers to make sure you will get a working cable for your meter.
 
 ## Code dependencies:
 flask
