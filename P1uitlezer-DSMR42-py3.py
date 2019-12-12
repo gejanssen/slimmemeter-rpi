@@ -107,7 +107,7 @@ con = sqlite3.connect('dsmr42.sqlite')
 cur = con.cursor()
 placeholders = ', '.join('?' * len(db_t_lines))
 sql = 'INSERT INTO telegrams VALUES ({})'.format(placeholders)
-print(sql, db_t_lines)
+#print(sql, db_t_lines)
 cur.execute(sql, db_t_lines)
 con.commit()
 
