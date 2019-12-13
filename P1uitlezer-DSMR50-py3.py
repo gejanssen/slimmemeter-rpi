@@ -85,6 +85,12 @@ while p1_teller < 36:
     if p1[0].isdigit():
         #print(p1)
         key, val = p1.strip().split('(', 1)
+        if "1-0:99.97.0" in key:
+            # special case with possible powerfailures list
+            db_t_lines.append(val[3:])
+            t_lines[key] = val
+            continue
+
         db_t_lines.append(val.strip(")")) # strip the ) to get original value for dbase
         val = val[:-1] # loose last )
         if "*kW" in val:
@@ -96,14 +102,14 @@ while p1_teller < 36:
 
     p1_teller = p1_teller + 1
 #print(len(t_lines), "total lines")
-if len(t_lines) != 30:
+if len(t_lines) != 34:
     halt("No valid telegram received?", ret=3)
 
 # strore the data into the dbase first
 #pprint(db_t_lines)
 t = datetime.now().astimezone().isoformat()
 db_t_lines.append(t)
-con = sqlite3.connect('dsmr42.sqlite')
+con = sqlite3.connect('dsmr50.sqlite')
 cur = con.cursor()
 placeholders = ', '.join('?' * len(db_t_lines))
 sql = 'INSERT INTO telegrams VALUES ({})'.format(placeholders)
@@ -131,7 +137,8 @@ for key, val in t_lines.items():
         print("{:<30s} {:<10} W".format("huidig afgenomen vermogen", float(val) * 1000))
     elif key == "1-0:2.7.0":
         print("{:<30s} {:<10} W".format("huidig teruggeleverd vermogen", float(val) * 1000))
-
+    elif key == "0-1:24.2.1":
+        print("{:<30s} {:<10} KW".format("totaal gas verbruik", val))
 
 print("{:<30s} {:<10} KW {:<10}".format("meter totaal", meter, "afgenomen/teruggeleverd van het net"))
 
