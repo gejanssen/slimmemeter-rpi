@@ -64,7 +64,7 @@ def maxRowsTable():
     row = curs.execute("select COUNT(id) from  telegrams").fetchone()
     conn.close()
     if row:
-        return row[0][0]
+        return row[0]
     else:
         return 0
 
