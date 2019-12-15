@@ -61,14 +61,14 @@ def getHistData(numSamples):
 def maxRowsTable():
     conn = sqlite3.connect('../dsmr42.sqlite')
     curs = conn.cursor()
-    for row in curs.execute("select COUNT(id) from  telegrams"):
-        maxNumberRows = row[0]
+    row = curs.execute("select COUNT(id) from  telegrams").fetchone()
     conn.close()
-    return maxNumberRows
-
+    if row:
+        return row[0][0]
+    else:
+        return 0
 
 # initialize global variables
-global numSamples
 global time_obj
 numSamples = maxRowsTable()
 if (numSamples > 101):
