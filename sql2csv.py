@@ -2,7 +2,7 @@ import datetime
 import re
 import sqlite3
 
-
+dbpath = 'dsmr50.sqlite'
 numSamples = 0 # meaning all entries
 db_col = '1-0:1.7.0'
 csv_name = 'KW-usage.csv'
@@ -11,7 +11,7 @@ def getDatetimeObject(iso_string):
     timestamp = re.sub(r"[:]|([-](?!((\d{2}[:]\d{2})|(\d{4}))$))", '', iso_string)
     return datetime.datetime.strptime(timestamp, "%Y%m%dT%H%M%S.%f%z")
 
-conn = sqlite3.connect('dsmr50.sqlite')
+conn = sqlite3.connect(dbpath)
 curs = conn.cursor()
 
 if numSamples == 0:
