@@ -7,11 +7,12 @@ import json
 
 app = Flask(__name__)
 
-numSamples = 0
+numSamples = 100
 
 def getDatetimeObject(iso_string):
     timestamp = re.sub(r"[:]|([-](?!((\d{2}[:]\d{2})|(\d{4}))$))", '', iso_string)
-    return datetime.datetime.strptime(timestamp, "%Y%m%dT%H%M%S.%f%z")
+    dt = datetime.datetime.strptime(timestamp, "%Y%m%dT%H%M%S.%f%z")
+    return dt
 
 
 @app.route("/data.json")
@@ -26,7 +27,7 @@ def data():
     curs.execute("SELECT `1-0:1.7.0`, `timestamp` FROM telegrams ORDER BY timestamp DESC LIMIT " + str(numSamples))
     data = curs.fetchall()
     #datalist = [(float(v.split('*')[0]), str(getDatetimeObject(ts).time())) for v, ts in data if '*' in v]
-    datalist = [(1, float(v.split('*')[0])) for v, ts in data if '*' in v]
+    datalist = [(str(getDatetimeObject(ts)), float(v.split('*')[0])) for v, ts in data if '*' in v]
     print(datalist)
     return json.dumps(datalist)
 

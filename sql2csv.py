@@ -8,6 +8,10 @@ db_col = '1-0:1.7.0'
 csv_name = 'KW-usage.csv'
 
 def getDatetimeObject(iso_string):
+    if iso_string.find('.') == -1:
+        # when we don't have a decimal the datetime fails
+        a, b = iso_string.split('+')
+        iso_string = "{}.0+{}".format(a, b)
     timestamp = re.sub(r"[:]|([-](?!((\d{2}[:]\d{2})|(\d{4}))$))", '', iso_string)
     return datetime.datetime.strptime(timestamp, "%Y%m%dT%H%M%S.%f%z")
 

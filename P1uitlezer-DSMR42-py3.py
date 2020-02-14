@@ -1,6 +1,9 @@
 #
 # DSMR P1 uitlezer
 # (c) 10-2012 2016 - GJ - gratis te kopieren en te plakken
+
+PRODUCTION = True
+
 from datetime import datetime
 import sqlite3
 from pprint import pprint
@@ -110,6 +113,11 @@ sql = 'INSERT INTO telegrams VALUES ({})'.format(placeholders)
 #print(sql, db_t_lines)
 cur.execute(sql, db_t_lines)
 con.commit()
+
+if PRODUCTION:
+
+
+    sys.exit(0)
 
 meter = 0
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /home/pi/slimmemeter-rpi/rspiWebServer || exit
-python3 appWebserverHist.py
+cd /home/pi/slimmemeter-rpi/rspiWebServer-1 || exit
+python3 appWebserver.py
 
 
