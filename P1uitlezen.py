@@ -45,6 +45,8 @@ except Exception as e:
 # p1_teller is mijn tellertje voor van 0 tot 20 te tellen
 p1_teller = 0
 
+f = open('telegram-dsrm50.txt', 'w')
+
 while p1_teller < 40:
     p1_line = ''
     # Read 1 line
@@ -53,9 +55,10 @@ while p1_teller < 40:
     except Exception as e:
         print(e)
         sys.exit("Error reading serial socket")
-
     else:
         p1 = p1.decode()
+        print("raw", p1)
+        f.write(p1)                                                                 
 
     if p1[0].isdigit():
         print(f"line {p1_teller} => {p1}")
@@ -65,6 +68,11 @@ while p1_teller < 40:
         break
 
     p1_teller = p1_teller + 1
+
+try:
+    f.close()
+except:
+    print("Failed to close file")
 
 # Close port
 try:
