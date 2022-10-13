@@ -5,49 +5,69 @@ import sys
 import serial
 
 ##############################################################################
-#Main program
+# Main program
 ##############################################################################
-print ("DSMR P1 uitlezen",  versie)
-print ("Control-C om te stoppen")
-print ("Pas eventueel de waarde ser.port aan in het python script")
+print("DSMR P1 uitlezen (raw)", versie)
+print("Control-C om te stoppen")
+print("Pas eventueel de waarde ser.port aan in het python script")
+input("Hit any key to start")
 
-#Set COM port config
+# Set COM port config (dsmr4.2)
+# ser = serial.Serial()
+# ser.baudrate = 9600
+# ser.bytesize = serial.SEVENBITS
+# ser.parity = serial.PARITY_EVEN
+# ser.stopbits = serial.STOPBITS_ONE
+# ser.xonxoff = 0
+# ser.rtscts = 0
+# ser.timeout = 20
+
+# Set COM port config (dsmr 5.0)
 ser = serial.Serial()
-ser.baudrate = 9600
-ser.bytesize=serial.SEVENBITS
-ser.parity=serial.PARITY_EVEN
-ser.stopbits=serial.STOPBITS_ONE
-ser.xonxoff=0
-ser.rtscts=0
-ser.timeout=20
-ser.port="/dev/ttyUSB0"
+ser.baudrate = 115200
+ser.bytesize = serial.SEVENBITS
+ser.parity = serial.PARITY_EVEN
+ser.stopbits = serial.STOPBITS_ONE
+ser.xonxoff = 0
+ser.rtscts = 0
+ser.timeout = 20
 
-#Open COM port
+ser.port = "/dev/ttyUSB0"
+
+# Open COM port
 try:
     ser.open()
-except:
-    sys.exit ("Fout bij het openen van %s. Aaaaarch."  % ser.name)      
+except Exception as e:
+    print(f"Error opening COM: {e}")
+    sys.exit("Fout bij het openen van %s. Aaaaarch." % ser.name)
 
+# Initialize
+# p1_teller is mijn tellertje voor van 0 tot 20 te tellen
+p1_teller = 0
 
-#Initialize
-#p1_teller is mijn tellertje voor van 0 tot 20 te tellen
-p1_teller=0
-
-while p1_teller < 20:
-    p1_line=''
-#Read 1 line van de seriele poort
+while p1_teller < 40:
+    p1_line = ''
+    # Read 1 line
     try:
-        p1_raw = ser.readline()
-    except:
-        sys.exit ("Seriele poort %s kan niet gelezen worden. Aaaaaaaaarch." % ser.name )      
-    p1_str=str(p1_raw)
-    p1_line=p1_str.strip()
-# als je alles wil zien moet je de volgende line uncommenten
-    print (p1_line)
-    p1_teller = p1_teller +1
+        p1 = ser.readline()
+    except Exception as e:
+        print(e)
+        sys.exit("Error reading serial socket")
 
-#Close port and show status
+    else:
+        p1 = p1.decode()
+
+    if p1[0].isdigit():
+        print(f"line {p1_teller} => {p1}")
+
+    elif p1.startswith("!"):
+        # end of a telegram
+        break
+
+    p1_teller = p1_teller + 1
+
+# Close port
 try:
     ser.close()
 except:
-    sys.exit ("Oops %s. Programma afgebroken. Kon de seriele poort niet sluiten." % ser.name )      
+    sys.exit("Oops %s. Programma afgebroken. Kon de seriele poort niet sluiten." % ser.name)

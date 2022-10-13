@@ -34,7 +34,7 @@ Also check the reviews for dutch reviewers to make sure you will get a working c
 ## Code dependencies:
 flask
 matplotlib
-serial
+pyserial
 
 ## Pull the meter for a telegram
 We use a crontab to pull every 5 minutes a new telegram from the meter.  
