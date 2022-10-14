@@ -22,12 +22,10 @@ def show_error(mesg=''):
 
 def halt(mesg="Clean exit", ret=0):
     print(mesg)
-    # Close port and show status
     try:
         ser.close()
     except:
         show_error(ser.name)
-        # in *nix you should pass 0 for succes or >0 when it fails as exitr value
         sys.exit(1)
     sys.exit(ret)
 
@@ -35,7 +33,7 @@ def halt(mesg="Clean exit", ret=0):
 ##################################################
 # Main program
 ##################################################
-print("DSMR 4.2 P1 uitlezer", versie)
+print("DSMR 5.0 P1 uitlezer", versie)
 print("Control-C om te stoppen")
 
 # Set COM port config
@@ -56,8 +54,6 @@ except:
     show_error(ser.name)
     halt("Error opening serial socket", ret=1)
 
-# Initialize
-# stack is mijn list met de 36 regeltjes.
 p1_teller = 0
 t_lines = {}
 db_t_lines = [None]
@@ -70,14 +66,11 @@ while p1_teller < 36:
     # Read 1 line
     try:
         p1 = ser.readline()
-        # if lines:
-        #     p1 = lines.pop(0)
-        # else:
-        #     break
     except Exception as e:
         print(e)
         show_error(ser.name)
         halt("Error reading serial socket", ret=2)
+        break
     else:
         p1 = p1.decode()
 
