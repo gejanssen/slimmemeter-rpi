@@ -99,7 +99,7 @@ def read_com():
                     sys.exit(2)
                 else:
                     read_trys = - 1
-                    time.sleep(10)
+
 
     # If we come here we have a start of a telegram
     p1_lines = []
@@ -134,25 +134,37 @@ def parse_telegram(telegram):
         if line[0].isdigit():
             # print(p1)
             key, val = line.split('(', 1)
-            if key not in obis.keys():
+            if key not in obis2dbcol.keys():
                 print(f"key {key} not found in obis, continuing")
                 continue
 
-            # power faillure doesn't look like valid values
-            if '1-0:99.97.0' in key:
-                # special case with possible powerfailures list, first 4 entries looks like crap
-                val = val.split(')(')[4:]
-                val[-1] = val[-1].strip(')')
-            elif '0-1:24.2.1' in key:
+            # # power faillure doesn't look like valid values
+            # if '1-0:99.97.0' in key:
+            #     # special case with possible powerfailures list, first 4 entries looks like crap
+            #     val = val.split(')(')[4:]
+            #     val[-1] = val[-1].strip(')')
+
+            if '0-1:24.2.1' in key:
                 # special case for gas, key value is different
                 print(f"gas key, val: {key}, {val}")
                 val = val.split(')(')
                 val[1] = val[1].split('*')[0]
-                val[0] = f"20{val[0][0:2]}-{val[0][2:4]}-{val[0][4:6]} {val[0][6:8]}:{val[0][8:10]}:{val[0][10:12]}"
+                try:
+                    val[1] = float(val[1])
+                except Exception as e:
+                    print(f"Failed to floatify val: e")
+                    continue
+                else:
+                    val[0] = f"20{val[0][0:2]}-{val[0][2:4]}-{val[0][4:6]} {val[0][6:8]}:{val[0][8:10]}:{val[0][10:12]}"
             else:
                 val = val[:-1]  # loose last )
                 if '*kW' in val:
                     val = val.split('*')[0]
+                    try:
+                        val = float(val)
+                    except Exception as e:
+                        print(f"Failed to floatify val: e")
+                        continue
 
             if type(val) is str and val.endswith('S'):
                 # it's a timestamp
