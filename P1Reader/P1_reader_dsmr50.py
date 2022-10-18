@@ -64,10 +64,15 @@ def make_db(db_path):
 
 
 def read_com():
-    read_trys = 30  # we wait 2 seconds so this will be around 60 seconds
+    # Open COM port
+    try:
+        ser.open()
+    except Exception as e:
+        print(f"Error opening COM: {e}")
+        sys.exit("Fout bij het openen van %s. Aaaaarch." % ser.name)
 
+    read_trys = 30  # we wait 2 seconds so this will be around 60 seconds
     while read_trys:
-        p1_line = ''
         # Read 1 line
         try:
             p1 = ser.readline()
@@ -79,7 +84,7 @@ def read_com():
                 sys.exit(1)
             else:
                 read_trys = - 1
-                time.sleep(2)
+                time.sleep(10)
         else:
             p1 = p1.decode()
             print("raw", p1)
@@ -94,7 +99,7 @@ def read_com():
                     sys.exit(2)
                 else:
                     read_trys = - 1
-                    time.sleep(2)
+                    time.sleep(10)
 
     # If we come here we have a start of a telegram
     p1_lines = []
@@ -130,8 +135,8 @@ def parse_telegram(telegram):
             # print(p1)
             key, val = line.split('(', 1)
             if key not in obis.keys():
-                print(f"key {key} not found in obis, quitting")
-                return [], {}
+                print(f"key {key} not found in obis, continuing")
+                continue
 
             # power faillure doesn't look like valid values
             if '1-0:99.97.0' in key:
