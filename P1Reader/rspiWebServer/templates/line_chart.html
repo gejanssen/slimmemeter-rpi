@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{{ title }}</title>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>-->
+<!--<script type="text/javascript" src="../js/chart-1.0.2.js"></script>-->
+</head>
+
+<body>
+    <h1>{{ title }}</h1>
+
+    <canvas id="chart" width="900" height="400"></canvas>
+    <script>
+
+      // bar chart data
+      var barData = {
+        labels : [
+          {% for item in labels %}
+            "{{ item }}",
+          {% endfor %}
+        ],
+
+        datasets : [{
+          fillColor: "rgba(151,187,205,0.2)",
+          strokeColor: "rgba(151,187,205,1)",
+          pointColor: "rgba(151,187,205,1)",
+          pointStrokeColor: "#fff",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(151,187,205,1)",
+          bezierCurve : false,
+          data : [
+	    {% for item in values %}
+              {{ item }},
+            {% endfor %}]
+          }
+	]
+      }
+
+      Chart.defaults.global.animationSteps = 50;
+      Chart.defaults.global.tooltipYPadding = 16;
+      Chart.defaults.global.tooltipCornerRadius = 0;
+      Chart.defaults.global.tooltipTitleFontStyle = "normal";
+      Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+      Chart.defaults.global.animationEasing = "easeOutBounce";
+      Chart.defaults.global.responsive = false;
+      Chart.defaults.global.scaleLineColor = "black";
+      Chart.defaults.global.scaleFontSize = 16;
+
+      // get bar chart canvas
+      var mychart = document.getElementById("chart").getContext("2d");
+
+      steps = 10
+      max = {{ max }}
+      // draw bar chart
+      var LineChartDemo = new Chart(mychart).Line(barData, {
+        scaleOverride: true,
+        scaleSteps: steps,
+        scaleStepWidth: Math.ceil(max / steps),
+        scaleStartValue: 0,
+        scaleShowVerticalLines: false,
+        scaleShowGridLines : true,
+        barShowStroke : true,
+        scaleShowLabels: true,
+        bezierCurve: false,
+      });
+
+    </script>
+</body>
+</html>

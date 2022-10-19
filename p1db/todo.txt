@@ -1,6 +1,0 @@
-
-check of hetscript wel goed doorloopt.
-
-en grafisch uitlezen
-
-http://gnuplot.sourceforge.net/demo/simple.html

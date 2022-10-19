@@ -1,7 +1,7 @@
 # Slimme meter info
 Code is forked from: https://github.com/gejanssen/slimmemeter-rpi  
-Webserver based of: https://medium.com/@rovai/from-data-to-graph-a-web-jorney-with-flask-and-sqlite-6c2ec9c0ad0  
 Telegram codes and explanation: http://domoticx.com/p1-poort-slimme-meter-hardware/  
+en de NL netbeheerders pdf: Slimme_meter_15_a727fce1f1.pdf
 
 ## Korte uitleg over slimme meters (Taken from domotix)
 ### Wat is een P1 poort?
@@ -20,8 +20,9 @@ moet hij aan kunnen.
 De P1 poort stuurt alleen maar data als de RTS pin is voorzien van >+5v ten opzichte van de GND (-),
 zolang de spanning daarop blijft staan wordt er elke 10 seconden een “telegram” verzonden op de TxD
 
-### Voorbeeld van een telegram, zie test-telegram.txt
-Dit voorbeeld is van een Landis 350 DSRM4.2
+### Voorbeeld van een telegram, zie 
+Dit voorbeeld is van een Landis 360 DSRM5.0
+telegram-dsrm50.txt
 
 ## Connect to the meter
 To connect to the meter you need a serial2usb cable.  
@@ -33,13 +34,12 @@ Also check the reviews for dutch reviewers to make sure you will get a working c
 
 ## Code dependencies:
 flask
-matplotlib
 pyserial
 
 ## Pull the meter for a telegram
-We use a crontab to pull every 5 minutes a new telegram from the meter.  
+We use a crontab to pull every 2 minutes a new telegram from the meter.  
 (Uncomment the last part to get some output for testing)  
-```*/5 * * * * /home/pi/slimmemeter-rpi/pull.sh #>>/tmp/cronrun 2>&1```
+```*/2 * * * * /home/pi/slimmemeter-rpi/pull.sh #>>/tmp/cronrun 2>&1```
 
 ## Setup server as a systemd service
 To start the flask server use the systemd service.  
